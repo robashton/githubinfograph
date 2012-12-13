@@ -1,0 +1,38 @@
+h1 {
+  font-size: 3em;
+  padding: 0.4em;
+}
+
+h3 { 
+  padding: 2em;
+}
+
+.dash {
+  font-size: 2.5em;
+}
+
+.dash dt, .dash dd {
+  padding: 0.4em;
+  width: 400px;
+}
+
+#timeline {
+  width: 90%;
+  margin-left: 5%;
+  margin-right: 5%;
+}
+
+#octocat {
+  opacity: 0.3;
+  z-index: -1;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 90%;
+  height: 100%;
+  margin: 0;
+  margin-left: 10%;
+  padding: 0;
+  background: url('/octocat.png');
+  background-repeat: no-repeat;
+}
