@@ -1,9 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <script type="text/javascript" src="/lib/jquery.js"></script>
-    <script type="text/javascript" src="/lib/bootstrap/js/bootstrap.min.js"></script>
-    <script src="http://d3js.org/d3.v2.js"></script>
     <link rel="stylesheet" type="text/css" href="/lib/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="/info.css">
   </head>
@@ -14,13 +11,12 @@
         <h3>Today</h3>
         <div class="span8">
           <dl class="dl-horizontal">
-              <dt>Repositories published</dt>
-              <dd id="total-repositories">0</dd>
-              <dt>Gists shared</dt>
-              <dd id="total-gists">0</dd>
-              <dt>Commits pushed</dt>
-              <dd id="total-commits">0</dd>
-            </li>
+            <dt>Repositories published</dt>
+            <dd id="total-repositories">0</dd>
+            <dt>Gists shared</dt>
+            <dd id="total-gists">0</dd>
+            <dt>Commits pushed</dt>
+            <dd id="total-commits">0</dd>
           </dl>
         </div>
         <div class="span8">
@@ -42,10 +38,14 @@
         <div id="timeline"></div>
       </div>
       <div class="row">
-        <h3>Now</h3>
+        <h3>This hour</h3>
         <div id="now"></div>
       </div>
     </div>
   </body>
+  <script type="text/javascript" src="/lib/jquery.js"></script>
+  <script type="text/javascript" src="/lib/bootstrap/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="lib/d3.v2.js"></script>
   <script type="text/javascript" src="/dailygithub.js"></script>
+  <script type="text/javascript" src="/nowgithub.js"></script>
 </html>

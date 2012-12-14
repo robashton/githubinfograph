@@ -4,16 +4,14 @@ var path = require('path')
 var url = require('url')
 var app = require('express')()
 var githubjob = require('./githubjob')
-var recentEvents = require('./recentevents')
-
+var lasthour = require('./lasthour')
 
 var server = http.createServer(app).listen(8000);
 
-githubjob.start('127.0.0.1', 2113, 50)
-recentEvents.start('127.0.0.1', 2113, 50)
+//githubjob.start()
 
 app.get('/now', function(req, res) {
-  res.send(recentEvents.get())
+  res.send(lasthour.get())
 })
 
 app.use(

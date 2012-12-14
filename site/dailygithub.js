@@ -80,6 +80,7 @@ function generateStatsOverall() {
       .attr("cx", function(d) { return  leftOfGrid +  d.hour * (spacePerQuad) - spacePerQuad/2.0 })
       .attr("cy", topOfGrid + (spacePerQuad/2.0) + spacePerQuad * i)
       .attr("r", function(d) { return scale(d.value) })
+      .attr('fill', "rgb(128,0,128)")
   }
 }
 generateStatsOverall()
