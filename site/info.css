@@ -16,7 +16,7 @@ h3 {
   width: 400px;
 }
 
-#timeline {
+#timeline, #now {
   width: 90%;
   margin-left: 5%;
   margin-right: 5%;

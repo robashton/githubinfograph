@@ -44,8 +44,6 @@ function generateStatsOverall() {
           .attr("width", width)
           .attr("height", height)
 
-
-
    var hours = d3.range(0, 24, 1)
 
    svg.selectAll("line.vertical")
