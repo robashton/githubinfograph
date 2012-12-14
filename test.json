@@ -1,0 +1,61 @@
+{  
+  "title": "Event stream 'github'",
+  "id": "http://127.0.0.1:2113/streams/github",
+  "updated": "2012-12-13T14:40:13.198056Z",
+  "author": {
+    "name": "EventStore"
+  },
+  "links": [
+    {
+      "uri": "http://127.0.0.1:2113/streams/github",
+      "relation": "self"
+    },
+    {
+      "uri": "http://127.0.0.1:2113/streams/github/range/19/20",
+      "relation": "first"
+    },
+    {
+      "uri": "http://127.0.0.1:2113/streams/github/range/20/20",
+      "relation": "prev"
+    },
+    {
+      "uri": "http://127.0.0.1:2113/streams/github/range/0/20",
+      "relation": "next"
+    }
+  ],
+  "entries": [
+    {
+      "title": "github #0",
+      "id": "http://127.0.0.1:2113/streams/github/0",
+      "updated": "2012-12-13T14:40:13.198056Z",
+      "author": {
+        "name": "EventStore"
+      },
+      "summary": "Entry #0",
+      "links": [
+        {
+          "uri": "http://127.0.0.1:2113/streams/github/0",
+          "relation": "edit"
+        },
+        {
+          "uri": "http://127.0.0.1:2113/streams/github/event/0?format=text",
+          "type": "text/plain"
+        },
+        {
+          "uri": "http://127.0.0.1:2113/streams/github/event/0?format=json",
+          "relation": "alternate",
+          "type": "application/json"
+        },
+        {
+          "uri": "http://127.0.0.1:2113/streams/github/event/0?format=xml",
+          "relation": "alternate",
+          "type": "text/xml"
+        }
+      ]
+    }
+  ]
+}
+
+
+
+
