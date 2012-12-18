@@ -1,0 +1,20 @@
+{
+  "author": "Rob Ashton <robashton@codeofrob.com> (http://codeofrob.com)",
+  "name": "githubevents",
+  "description": "Eventstore test run",
+  "version": "0.0.0",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/robashton/githubinfograph.git"
+  },
+  "dependencies": {
+    "send": "~0.1.0",
+    "express": "~3.0.4",
+    "underscore": "~1.4.3"
+  },
+  "devDependencies": {},
+  "optionalDependencies": {},
+  "engines": {
+    "node": "*"
+  }
+}
