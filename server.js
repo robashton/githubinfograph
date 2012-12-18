@@ -3,12 +3,9 @@ var http = require('http')
 var path = require('path')
 var url = require('url')
 var app = require('express')()
-var githubjob = require('./githubjob')
-var lasthour = require('./lasthour')
+var lasthour = require('./src/lasthour')
 
 var server = http.createServer(app).listen(8000);
-
-//githubjob.start()
 
 app.get('/now', function(req, res) {
   res.send(lasthour.get())
