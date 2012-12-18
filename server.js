@@ -6,7 +6,9 @@ var app = require('express')()
 var lasthour = require('./src/lasthour')
 var today = require('./src/today')
 
-var server = http.createServer(app).listen(process.env.PORT || 8000);
+var port = process.env.NODE_ENV === 'production' ? 8005 : 8000
+
+var server = http.createServer(app).listen(port);
 
 app.get('/now', function(req, res) {
   res.send(lasthour.get())
