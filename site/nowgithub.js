@@ -23,15 +23,17 @@ function generateStatsNow() {
           .attr("height", height)
 
   $.getJSON('/now', function(data) {
+    var start = Date.parse(data.start)
+      , end = Date.parse(data.end)
     var horizontal = d3.scale.linear()
-      .domain([ new Date(data.start), new Date(data.end) ])
+      .domain([ start, end  ])
       .range([0, width]);
 
     svg.selectAll("circle")
       .data(data.events)
       .enter().append('circle')
         .attr("cx", function(d) {
-          return horizontal(new Date(d.created_at))
+          return horizontal(Date.parse(d.created_at))
         })
         .attr("cy", function() {
           return Math.random() * (height  - 40) + 20
