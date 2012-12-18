@@ -4,7 +4,10 @@ var projections = [
   "$streams",
   "$stream_by_category",
   "$by_category",
-  "$by_event_type"
+  "$by_event_type",
+  "partition_by_day_and_hour",
+  "daily_totals",
+  "hourly_totals"
 ]
 
 
