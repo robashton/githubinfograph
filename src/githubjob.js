@@ -49,6 +49,11 @@ var processData = function(data) {
 
 var downloadEvents = function() {
  var request = https.get({ host: 'api.github.com', path: '/events'}, function(res) {
+    if(res.statusCode === 403) {
+       timeUntilNextEvents = timeUntilNextEvents * 2
+       setTimeout(downloadEvents, timeUntilNextEvents)
+       return
+    }
     var data = '';
     res.on('data', function (chunk) {
       data += chunk;
