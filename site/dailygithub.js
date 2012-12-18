@@ -1,30 +1,4 @@
-  var data = [ 
-    [ ],
-    [ ],
-    [ ],
-    [ ],
-    [ ],
-    [ ],
-    [ ],
-    [ ],
-    [ ],
-    [ ]
-  ]
-
-  var series = [
-    "Repositories published",
-    "Gists shared",
-    "Pushes",
-    "Issues opened",
-    "Issues closed",
-    "Issue comments",
-    "Commit comments",
-    "Pull requests",
-    "Forks",
-    "Watches"
-  ]
-
-function generateStatsOverall() {
+function generateStatsOverall(data, series) {
 
   var container = document.getElementById('timeline')
     , width = container.offsetWidth
@@ -35,16 +9,6 @@ function generateStatsOverall() {
     , topOfGrid = 20 
     , spacePerQuad = gridWidth / 24
     , height = spacePerQuad * series.length + topOfGrid
-
-  for(k in data) {
-    var v = data[k]
-    for(i = 0; i < 24; i++) {
-      v.push({
-        hour: i,
-        value: Math.floor(Math.random() * 50 + 50)
-      })
-    }
-  }
 
   var svg = d3.select("#timeline").append("svg")
           .attr("width", width)
@@ -63,7 +27,7 @@ function generateStatsOverall() {
   for(i = 0 ; i < series.length; i++) {
 
     var scale = d3.scale.linear()
-       .domain([0, d3.max(data[i], function(d) { return d.value; })])
+       .domain([0, d3.max(data[i], function(d) { return d || 0 })])
        .range([0, spacePerQuad]);
 
      svg.append("svg:text")
@@ -74,13 +38,38 @@ function generateStatsOverall() {
      svg.selectAll("line.series-" + i)
       .data(data[i])
       .enter().append("svg:line")
-      .attr("x1", function(d) { return  leftOfGrid +  d.hour * (spacePerQuad) - spacePerQuad/2.0 })
-      .attr("x2", function(d) { return  leftOfGrid +  (d.hour+1) * (spacePerQuad) - spacePerQuad/2.0 })
+      .attr("x1", function(d, hour) { 
+          return  leftOfGrid +  hour * (spacePerQuad) - spacePerQuad/2.0 })
+      .attr("x2", function(d, hour) { 
+          return  leftOfGrid +  (hour+1) * (spacePerQuad) - spacePerQuad/2.0 })
       .attr("y1", topOfGrid + (spacePerQuad/2.0) + spacePerQuad * i)
       .attr("y2", topOfGrid + (spacePerQuad/2.0) + spacePerQuad * i)
-      .attr("stroke-width", function(d) { return scale(d.value) })
+      .attr("stroke-width", function(d) { console.log(d);  return scale(d || 0) })
       .attr('stroke', "rgb(128,0,128)")
   }
 }
-generateStatsOverall()
+
+function updateToday(totals) {
+  $('#total-repositories').text(totals.repocreated || 0)
+  $('#total-gists').text(totals.gistcreated || 0)
+  $('#total-commits').text(totals.pushes || 0)
+  $('#total-pullrequests').text(totals.pullrequestopened || 0)
+  $('#total-issues-opened').text(totals.issuesopened || 0)
+  $('#total-issue-comments').text(totals.issuecomments || 0)
+  $('#total-issues-closed').text(totals.issuesclosed || 0)
+  $('#total-commit-comments').text(totals.commitcomments || 0)
+}
+
+$.getJSON('/today', function(data) {
+  updateToday(data.totals)
+  var series = []
+  var seriesData = []
+
+  for(var i in data.hourly) {
+    series.push(i)
+    seriesData.push(data.hourly[i])
+  }
+  generateStatsOverall(seriesData, series)
+})
+
 

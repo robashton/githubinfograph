@@ -44,6 +44,8 @@ _.extend(EventStream.prototype, {
     })
   },
   onEventsReceived: function(res) {
+    if(res.statusCode !== 200) return this.pumpEventsDeferred()
+
     var json = ''
     var self = this
     res.setEncoding('utf8')

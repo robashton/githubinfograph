@@ -4,11 +4,16 @@ var path = require('path')
 var url = require('url')
 var app = require('express')()
 var lasthour = require('./src/lasthour')
+var today = require('./src/today')
 
 var server = http.createServer(app).listen(8000);
 
 app.get('/now', function(req, res) {
   res.send(lasthour.get())
+})
+
+app.get('/today', function(req, res) {
+  res.send(today.get())
 })
 
 app.use(

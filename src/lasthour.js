@@ -22,7 +22,7 @@ function updateStream() {
 
     console.log(day, hour, month, year)
     hourlyEvents = []
-    if(stream) stream.off('data', pushEvent)
+    if(stream) stream.removeAllListeners()
     stream = new ExpandedEventStream('127.0.0.1', '2113', 
                   ['hour-', year,month,day,'_',hour].join(''))
     stream.on('data', pushEvent)
