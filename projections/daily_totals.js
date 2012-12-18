@@ -30,7 +30,7 @@ fromAll()
     "CommitCommentEvent": function(s, e) {
       addTo(s, e, "commitcomments")
     },
-    "CreatedEvent": function(s, e) {
+    "CreateEvent": function(s, e) {
       addTo(s, e, "repocreated")
     },
     "IssuesEvent": function(s, e) {
