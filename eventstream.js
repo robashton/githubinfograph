@@ -2,6 +2,7 @@ var http = require('http')
 var Stream = require('stream').Stream
 var util = require('util')
 var _ = require('underscore')
+var url = require('url')
 
 
 var EventStream = function(host, port, stream) {
@@ -11,7 +12,7 @@ var EventStream = function(host, port, stream) {
   this.host = host
   this.port = port
   this.stream = stream
-  this.lastid = 0
+  this.nextPage = null
   this.bufferSize = 20
   this.onEventsReceived = this.onEventsReceived.bind(this)
   this.pumpEvents = this.pumpEvents.bind(this)
@@ -24,9 +25,14 @@ _.extend(EventStream.prototype, {
     setTimeout(this.pumpEvents, this.throttle)
   },
   pumpEvents: function() {
-    var path = [ '/streams/', this.stream, 
-                '/range/',  (this.lastid + (this.bufferSize-1)), '/', this.bufferSize, '?format=json' 
+    var path = ''
+    if(this.nextPage) 
+      path = this.nextPage + '?format=json'
+    else
+      path = [ '/streams/', this.stream, 
+                '/range/' + (this.bufferSize-1), '/', this.bufferSize, '?format=json' 
                ].join('')
+
     var request = http.get({
       host: this.host,
       port: this.port,
@@ -46,6 +52,14 @@ _.extend(EventStream.prototype, {
     })
     res.on('end', function() {
       var parsed = JSON.parse(json)
+
+      for(var i = 0 ; i < parsed.links.length; i++) {
+        var link = parsed.links[i]
+        if(link.relation === 'prev') {
+          self.nextPage = url.parse(link.uri).pathname
+        }
+      }
+
       self.processEvents(parsed.entries)
     })
   },
@@ -54,7 +68,6 @@ _.extend(EventStream.prototype, {
     events.pop()
     while(events.length > 0) {
       var ev = events.pop()
-      this.lastid = this.parseIdFromEvent(ev)
       this.emit('data', ev)
     }
     if(count === this.bufferSize)

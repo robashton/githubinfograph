@@ -3,6 +3,7 @@ var EventStream = require('./eventstream')
   , util = require('util')
   , _ = require('underscore')
   , http = require('http')
+  , url = require('url')
 
 var ExpandedEventStream = function(host, port, stream) {
   Stream.call(this)
@@ -27,17 +28,28 @@ _.extend(ExpandedEventStream.prototype, {
        return this.pumpEventsDeferred()
 
      var ev = this.queue.shift()
-     var idstr = ev.id.substr(ev.id.lastIndexOf('/') + 1)
+     var path = null
+
+     for(var i = 0 ; i < ev.links.length; i++) {
+       var link = ev.links[i]
+       if(link.type === 'application/json') {
+         path = url.parse(link.uri).pathname
+         break;
+       }
+     }
+
      var self = this
      http.get({
         host: this.host,
         port: this.port,
-        path: '/streams/' + this.stream + '/event/' + idstr + '?format=json'
+        path: path + '?format=json'
       }, 
       function(res) {
         var json = ''
-        if(res.statusCode !== 200)
+        if(res.statusCode !== 200) {
+          console.log(res.statusCode)
           return self.pumpEventsDeferred()
+        }
         res.on('data', function(data) {
           json += data
         })

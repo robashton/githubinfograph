@@ -51,18 +51,6 @@ function generateStatsOverall() {
           .attr("height", height)
 
    var hours = d3.range(0, 24, 1)
-   /* 
-
-   svg.selectAll("line.vertical")
-     .data(hours)
-     .enter().append("svg:line")
-     .attr("x1", function(d){return d * spacePerQuad + leftOfGrid;})
-     .attr("y1", topOfGrid)
-     .attr("x2", function(d){return d * spacePerQuad + leftOfGrid;})
-     .attr("y2", spacePerQuad * series.length + topOfGrid)
-     .style("stroke", "rgb(6,120,155)")
-     .style("stroke-width", 1); 
-     */
 
    svg.selectAll("text.hour")
      .data(hours)
