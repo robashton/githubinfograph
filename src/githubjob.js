@@ -3,6 +3,7 @@ var https = require('https')
 
 var eventQueue = [];
 var timeUntilNextEvents = 10000;
+var remaining = 0
 var last_created_at = new Date();
 
 var fetchRepoInfo = function(name, cb) {
@@ -62,13 +63,19 @@ var downloadEvents = function() {
     res.on('end', function() {
       processData(data);
     });
-    timeUntilNextEvents = parseInt(res.headers['x-poll-interval'], 10) * 1000
-    console.log('Waiting ' + timeUntilNextEvents + 'ms until next poll')
+    timeUntilNextEvents = parseInt(res.headers['x-poll-interval'], 10) * 1000 
+    remaining = parseInt(res.headers['x-ratelimit-remaining'], 10)
+    console.log('There are', remaining , ' requests remaining')
   }).on('error', function(e) {
     console.error(e);
   }).end();
 
-  timeUntilNextEvents = 60000
+  if(remaining < 5)
+    timeUntilNextEvents *= 2
+  else 
+    timeUntilNextEvents *= 1.1
+
+  console.log('Waiting ' + timeUntilNextEvents + 'ms until next poll')
   setTimeout(downloadEvents, timeUntilNextEvents);
 };
 
