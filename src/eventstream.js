@@ -33,6 +33,7 @@ _.extend(EventStream.prototype, {
                 '/range/' + (this.bufferSize-1), '/', this.bufferSize, '?format=json' 
                ].join('')
 
+    console.log(path)
     var request = http.get({
       host: this.host,
       port: this.port,
@@ -43,9 +44,13 @@ _.extend(EventStream.prototype, {
       console.log(err)
       this.pumpEventsDeferred()
     })
+    request.end()
   },
   onEventsReceived: function(res) {
-    if(res.statusCode !== 200) return this.pumpEventsDeferred()
+    if(res.statusCode !== 200) {
+      console.log(res.statusCode)
+      return this.pumpEventsDeferred()
+    }
 
     var json = ''
     var self = this
@@ -56,27 +61,24 @@ _.extend(EventStream.prototype, {
     res.on('end', function() {
       var parsed = JSON.parse(json)
 
-      for(var i = 0 ; i < parsed.links.length; i++) {
-        var link = parsed.links[i]
-        if(link.relation === 'prev') {
-          self.nextPage = url.parse(link.uri).pathname
+      if(parsed.entries.length === self.bufferSize) {
+      	for(var i = 0 ; i < parsed.links.length; i++) {
+          var link = parsed.links[i]
+	  if(link.relation === 'prev') {
+	    self.nextPage = url.parse(link.uri).pathname
+	  }
         }
+        self.processEvents(parsed.entries)
       }
-
-      self.processEvents(parsed.entries)
+      self.pumpEventsDeferred()
     })
   },
   processEvents: function(events) {
     var count = events.length
-    events.pop()
     while(events.length > 0) {
       var ev = events.pop()
       this.emit('data', ev)
     }
-    if(count === this.bufferSize)
-      this.pumpEvents()
-    else
-      this.pumpEventsDeferred()
   },
   parseIdFromEvent: function(ev) {
     var idstr = ev.id.substr(ev.id.lastIndexOf('/') + 1)

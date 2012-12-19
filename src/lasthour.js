@@ -34,6 +34,7 @@ updateStream()
 
 function pushEvent(ev) {
   hourlyEvents.push(ev.data)
+  console.log(ev.data.created_at)
 }
 
 module.exports = {

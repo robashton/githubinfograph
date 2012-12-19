@@ -39,10 +39,11 @@ _.extend(ExpandedEventStream.prototype, {
      }
 
      var self = this
-     http.get({
+     var request = http.request({
         host: this.host,
         port: this.port,
-        path: path + '?format=json'
+        path: path + '?format=json',
+        method: "GET"
       }, 
       function(res) {
         var json = ''
@@ -62,6 +63,11 @@ _.extend(ExpandedEventStream.prototype, {
             self.pumpEventsDeferred()
         })
       })
+      request.on('error', function(err) {
+        console.log(err)
+        self.pumpEvents()
+      })
+      request.end()
    },
    onData: function(data) {
      this.queue.push(data)
