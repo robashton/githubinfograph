@@ -1,10 +1,10 @@
 var ExpandedEventStream = require('./expandedeventstream')
 
 var stream = null
-  , day = 0
-  , hour = 0
-  , month = 0
-  , year = 0
+  , day = -1 
+  , hour =-1 
+  , month =-1 
+  , year = -1
   , hourlyEvents = []
 
 function updateStream() {
