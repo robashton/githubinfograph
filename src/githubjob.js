@@ -52,6 +52,7 @@ var downloadEvents = function() {
     if(res.statusCode === 403) {
        timeUntilNextEvents = timeUntilNextEvents * 2
        setTimeout(downloadEvents, timeUntilNextEvents)
+       console.log('Being denied, waiting longer', timeUntilNextEvents)
        return
     }
     var data = '';
@@ -65,7 +66,7 @@ var downloadEvents = function() {
     console.log('Waiting ' + timeUntilNextEvents + 'ms until next poll')
   }).on('error', function(e) {
     console.error(e);
-  });
+  }).end();
 
   timeUntilNextEvents = 60000
   setTimeout(downloadEvents, timeUntilNextEvents);
