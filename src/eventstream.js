@@ -41,6 +41,7 @@ _.extend(EventStream.prototype, {
 
     request.on('error', function(err) {
       console.log(err)
+      this.pumpEventsDeferred()
     })
   },
   onEventsReceived: function(res) {
