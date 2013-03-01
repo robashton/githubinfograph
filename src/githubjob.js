@@ -5,9 +5,11 @@ var eventQueue = [];
 var timeUntilNextEvents = 10000;
 var remaining = 0
 var last_created_at = new Date();
+var config = require('../config')
+ ,  auth = config.auth
 
 var fetchRepoInfo = function(name, cb) {
- var request = https.get({ host: 'api.github.com', path: '/repos/' + name}, function(res) {
+ var request = https.get({ host: 'api.github.com', path: '/repos/' + name + auth}, function(res) {
     var data = '';
     res.on('data', function (chunk) {
       data += chunk;
@@ -49,7 +51,8 @@ var processData = function(data) {
 };
 
 var downloadEvents = function() {
- var request = https.get({ host: 'api.github.com', path: '/events'}, function(res) {
+  console.log('DOWNLOADING')
+ var request = https.get({ host: 'api.github.com', path: '/events' + auth}, function(res) {
     if(res.statusCode === 403) {
        timeUntilNextEvents = timeUntilNextEvents * 2
        setTimeout(downloadEvents, timeUntilNextEvents)
@@ -63,20 +66,13 @@ var downloadEvents = function() {
     res.on('end', function() {
       processData(data);
     });
-    timeUntilNextEvents = parseInt(res.headers['x-poll-interval'], 10) * 1000 
-    remaining = parseInt(res.headers['x-ratelimit-remaining'], 10)
-    console.log('There are', remaining , ' requests remaining')
   }).on('error', function(e) {
     console.error(e);
   }).end();
 
-  if(remaining < 5)
-    timeUntilNextEvents *= 2
-  else 
-    timeUntilNextEvents *= 1.1
-
   console.log('Waiting ' + timeUntilNextEvents + 'ms until next poll')
   setTimeout(downloadEvents, timeUntilNextEvents);
+
 };
 
 var broadcastEvent = function() {
