@@ -3,6 +3,7 @@ var https = require('https')
 
 var eventQueue = [];
 var timeUntilNextEvents = 10000;
+var skipped = false
 var remaining = 0
 var last_created_at = new Date();
 var config = require('../config')
@@ -36,42 +37,50 @@ var createDataFromPushEvent = function(data, cb) {
 var processEvent = function(event) {
   if(event.created_at < last_created_at) {
     console.log('Skipping event', event.created_at);
+    skipped = true
     return;
   }
   console.log('Processing event', event.created_at, ':', event.type);
   last_created_at = event.created_at;
-  eventQueue.push(event)
+
+  if(event.type === 'PushEvent') {
+    fetchRepoInfo(event.repo.name, function(repo) {
+      event.repo = repo
+      eventQueue.push(event)
+    })
+  }
 };
+
 
 var processData = function(data) {
   var eventArray = JSON.parse(data);
   for(var i = eventArray.length-1 ; i >= 0; i--) {
     processEvent(eventArray[i]);
   }
+  if(skipped) {
+    timeUntilNextEvents += 1000
+    skipped = false
+  }
+  else
+    timeUntilNextEvents -= 1000
 };
 
 var downloadEvents = function() {
-  console.log('DOWNLOADING')
  var request = https.get({ host: 'api.github.com', path: '/events' + auth}, function(res) {
-    if(res.statusCode === 403) {
-       timeUntilNextEvents = timeUntilNextEvents * 2
-       setTimeout(downloadEvents, timeUntilNextEvents)
-       console.log('Being denied, waiting longer', timeUntilNextEvents)
-       return
-    }
     var data = '';
+    var remaining = parseInt(res.headers['x-ratelimit-remaining'], 10)
+    console.log('There are ', remaining, ' requests remaining')
     res.on('data', function (chunk) {
       data += chunk;
     });
     res.on('end', function() {
       processData(data);
+      setTimeout(downloadEvents, timeUntilNextEvents);
     });
   }).on('error', function(e) {
     console.error(e);
+    setTimeout(downloadEvents, timeUntilNextEvents);
   }).end();
-
-  console.log('Waiting ' + timeUntilNextEvents + 'ms until next poll')
-  setTimeout(downloadEvents, timeUntilNextEvents);
 
 };
 
