@@ -14,17 +14,18 @@ if(process.env.emitters) {
     processNext()
   })
 }
-
-fs.readdir('projections', function(err, files) {
-  var i = 0
-  console.log('Found ', files.length, 'files')
-  function processNext() {
-    if(i >= files.length) return
-    console.log('Processing file ', i)
-    processFile(files[i++], processNext)
-  }
-  processNext()
-})
+else {
+  fs.readdir('projections', function(err, files) {
+    var i = 0
+    console.log('Found ', files.length, 'files')
+    function processNext() {
+      if(i >= files.length) return
+      console.log('Processing file ', i)
+      processFile(files[i++], processNext)
+    }
+    processNext()
+  })
+}
 
 
 function deleteProjection(name, cb) {
