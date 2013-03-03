@@ -55,7 +55,8 @@ var processEvent = function(event) {
 var processData = function(data) {
   var eventArray = JSON.parse(data);
   for(var i = eventArray.length-1 ; i >= 0; i--) {
-    processEvent(eventArray[i]);
+    if(i % 2 === 0)
+      processEvent(eventArray[i]);
   }
   if(skipped) {
     timeUntilNextEvents += 1000
@@ -75,10 +76,13 @@ var downloadEvents = function() {
     });
     res.on('end', function() {
       processData(data);
+      console.log('Waiting ', timeUntilNextEvents, ' until next poll')
       setTimeout(downloadEvents, timeUntilNextEvents);
     });
   }).on('error', function(e) {
     console.error(e);
+    timeUntilNextEvents *= 10
+    console.log('Waiting ', timeUntilNextEvents, ' until next poll')
     setTimeout(downloadEvents, timeUntilNextEvents);
   }).end();
 
