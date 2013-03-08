@@ -39,7 +39,7 @@ module.exports = function (settings) {
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",
-        "Content-Length": bodyStr.length
+//        "Content-Length": bodyStr.length
       }
     }, function(res) {
       var response = ''
