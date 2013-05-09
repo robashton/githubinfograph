@@ -8,9 +8,7 @@ module.exports = function (settings) {
     var host = settings.host || (function() { throw "host is required";})();
     var port = settings.port || (function() { throw "port is required";})();
 
-    var expectedVersion = settings.expectedVersion || -2;
     var eventId = settings.eventId || guid();
-    var correlationId = settings.correlationId || guid();
     var metadata = settings.metadata || "";
     var onError = settings.error || function() {};
     var onSuccess = settings.success || function() {};
@@ -21,11 +19,8 @@ module.exports = function (settings) {
         "Data":  data,
         "Metadata": metadata
     };
-    var body = {
-        "CorrelationId": correlationId,
-        "ExpectedVersion": expectedVersion,
-        "Events": [event]
-    };
+    var body = [event];
+    
     
     var bodyStr = JSON.stringify(body);
     var encodedStream = encodeURIComponent(stream);
@@ -48,11 +43,11 @@ module.exports = function (settings) {
         response += data
       })
       res.on('end', function() {
-        onSuccess(eventId, correlationId, response)
+        onSuccess(eventId, "whatever", response)
       })
     })
     req.on('error', function(err) {
-      onError(err, eventId, correlationId, expectedVersion)
+      onError(err, eventId, "Whatever", "")
     })
     req.write(bodyStr)
     req.end()

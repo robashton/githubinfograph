@@ -9,7 +9,7 @@ if(process.env.emitters) {
     function processNext() {
       if(i >= files.length) return
       console.log('Processing file ', i)
-      processFile(files[i++], processNext)
+      processFile(files[i++], "emitters", processNext)
     }
     processNext()
   })
@@ -21,7 +21,7 @@ else {
     function processNext() {
       if(i >= files.length) return
       console.log('Processing file ', i)
-      processFile(files[i++], processNext)
+      processFile(files[i++], "projections", processNext)
     }
     processNext()
   })
@@ -70,9 +70,9 @@ function createProjection(name, data, cb) {
   request.end()
 }
 
-function processFile(file, cb) {
+function processFile(file, dir, cb) {
   var name = file.substr(0, file.indexOf('.'))
-  var fullfile = path.join('projections', file)
+  var fullfile = path.join(dir, file)
   fs.readFile(fullfile, 'utf8', function(err, data) {
     deleteProjection(name, function() {
       createProjection(name, data, cb)

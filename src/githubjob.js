@@ -4,13 +4,12 @@ var https = require('https')
 var eventQueue = [];
 var timeUntilNextEvents = 10000;
 var skipped = false
-var remaining = 0
 var last_created_at = new Date();
 var config = require('../config')
  ,  auth = config.auth
 
 var fetchRepoInfo = function(name, cb) {
- var request = https.get({ host: 'api.github.com', path: '/repos/' + name + auth}, function(res) {
+ var request = https.get({ host: 'api.github.com', path: '/repos/' + name + auth, headers: { "User-Agent": "eventstoregithub" }}, function(res) {
     var data = '';
     res.on('data', function (chunk) {
       data += chunk;
@@ -67,7 +66,7 @@ var processData = function(data) {
 };
 
 var downloadEvents = function() {
- var request = https.get({ host: 'api.github.com', path: '/events' + auth}, function(res) {
+  var request = https.get({ host: 'api.github.com', path: '/events' + auth, headers: { "User-Agent": "eventstoregithub" }}, function(res) {
     var data = '';
     var remaining = parseInt(res.headers['x-ratelimit-remaining'], 10)
     console.log('There are ', remaining, ' requests remaining')

@@ -1,54 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <link rel="stylesheet" type="text/css" href="/lib/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="/info.css">
   </head>
   <body>
-    <div id="octocat"></div>
-    <div class="container-fluid">
-      <div class="row dash">
-        <h3>Today</h3>
-        <div class="span8">
-          <dl class="dl-horizontal">
-            <dt>Repositories published</dt>
-            <dd id="total-repositories">0</dd>
-            <dt>Gists shared</dt>
-            <dd id="total-gists">0</dd>
-            <dt>Commits pushed</dt>
-            <dd id="total-commits">0</dd>
-            <dt>Pull requests</dt>
-            <dd id="total-pullrequests">0</dd>
-          </dl>
-        </div>
-        <div class="span8">
-          <dl class="dl-horizontal">
-              <dt>Issues opened</dt>
-              <dd id="total-issues-opened">0</dd>
-              <dt>Issues closed</dt>
-              <dd id="total-issues-closed">0</dd>
-              <dt>Issue comments</dt>
-              <dd id="total-issue-comments">0</dd>
-              <dt>Commit comments</dt>
-              <dd id="total-commit-comments">0</dd>
-            </li>
-          </dl>
-        </div>
-      </div>
-      <div class="row">
-        <h3>Hourly</h3>
-        <div id="timeline"></div>
-      </div>
-      <div class="row">
-        <h3>This hour</h3>
-        <div id="now"></div>
-      </div>
-    </div>
+    <div id="container"></div>
   </body>
-  <script type="text/javascript" src="/lib/jquery.js"></script>
-  <script type="text/javascript" src="/lib/bootstrap/js/bootstrap.min.js"></script>
-  <script type="text/javascript" src="lib/d3.v2.js"></script>
-  <script type="text/javascript" src="/common.js"></script>
-  <script type="text/javascript" src="/dailygithub.js"></script>
-  <script type="text/javascript" src="/nowgithub.js"></script>
+  <script type="text/javascript" src="/lib/jquery-1.9.1.min.js"></script>
+  <script type="text/javascript" src="/lib/d3.v3.min.js"></script>
+  <script type="text/javascript" src="/magic.js"></script>
 </html>

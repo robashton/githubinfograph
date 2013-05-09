@@ -3,24 +3,13 @@ var http = require('http')
 var path = require('path')
 var url = require('url')
 var app = require('express')()
-var lasthour = require('./src/lasthour')
-var today = require('./src/today')
 
-var port = process.env.NODE_ENV === 'production' ? 8005 : 8000
+var port = process.env.PORT || 8001
 
-var server = http.createServer(app).listen(port);
-
-app.get('/now', function(req, res) {
-  res.send(lasthour.get())
-})
-
-app.get('/today', function(req, res) {
-  res.send(today.get())
-})
+http.createServer(app).listen(port);
 
 app.use(
   function(req, res) {
-
     function error(err) {
       res.statusCode = err.status || 500
       res.end(err.message)
